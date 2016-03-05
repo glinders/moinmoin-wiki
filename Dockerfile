@@ -65,6 +65,13 @@ RUN apt-get purge -qqy curl
 RUN apt-get autoremove -qqy && apt-get clean
 RUN rm -rf /tmp/* /var/lib/apt/lists/*
 
+# remove unwanted languages from underlay
+# reduces underlay size from 45MB to 5MB
+ADD move_underlay.py /usr/local/share/moin
+RUN cd /usr/local/share/moin && ./move_underlay.py
+RUN cd /usr/local/share/moin && rm -rf ./unwanted
+
+# expose volume for backup
 VOLUME /usr/local/share/moin/data
 
 EXPOSE 80
